@@ -18,6 +18,9 @@ io.on('connection', function(socket){
   socket.on('asking_for_img', function(data) {
     io.emit('asking_for_img', data);
   });
+  socket.on('movement_instruction', function(instruction) {
+    io.emit('movement_instruction', instruction);
+  })
 });
 
 http.listen(port, function(){});

@@ -1,6 +1,6 @@
 import React from "react";
 import SocketIOClient from "socket.io-client";
-import { StyleSheet, Text, TextInput, View, Button, Image, StatusBar, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Button, Image, StatusBar, TouchableOpacity } from "react-native";
 import { observer } from "mobx-react/native";
 import ObservableStore from "./ObservableStore";
 import BottomComponentPage from "./BottomComponentPages";
@@ -23,7 +23,7 @@ export default class App extends React.Component {
       text: "",
       topCameraRunning: false,
       topCameraNodeName: "null",
-      bottomComponentPage: 0 // 0 = Poses & Speech, 1 = Controls
+      bottomComponentPage: 1 // 0 = Poses, 1 = Controls, 2 = Speech
     };
   }
 
@@ -65,17 +65,14 @@ export default class App extends React.Component {
     */
   }
 
-  foo = () => {
-    if (this.state.bottomComponentPage == 0) {
-      this.setState({bottomComponentPage: 1})
-    } else {
-      this.setState({bottomComponentPage: 0})
-    }
+  setPage = (page) => {
+    this.setState({bottomComponentPage: page})
   }
   
   render() {
     return (
       <View style={{flex:1}}>
+
         <StatusBar hidden={true}/>
 
         <View style={styles.videoView}>
@@ -88,7 +85,7 @@ export default class App extends React.Component {
             <View style={styles.videoButton}>
               <TouchableOpacity
                 style={this.state.topCameraRunning ? styles.imageButtonOn : styles.imageButtonOff}
-                onPress={() => this.foo()}
+                onPress={() => this.listenerTopCamera()}
               >
                 <Text>{this.state.topCameraRunning ? "STOP CAMERA" : "START CAMERA"}</Text>
               </TouchableOpacity>
@@ -97,10 +94,35 @@ export default class App extends React.Component {
 
         <View style={styles.buttonsView}>
           <BottomComponentPage
-            socket={this.socket}
+            socketProp={socket}
             page={this.state.bottomComponentPage}
           />
         </View>
+
+        <View style={styles.menuBar}>
+          <View style={styles.menuBarButton}>
+            <Button //TODO: stretch the height of the buttons to full height of the flex
+              title="Poses"
+              onPress={() => this.setPage(0)}
+              color="green"
+            />
+          </View>
+          <View style={styles.menuBarButton}>
+            <Button
+              title="Movement"
+              onPress={() => this.setPage(1)}
+              color="green"
+            />
+          </View>
+          <View style={styles.menuBarButton}>
+            <Button
+              title="Speech"
+              onPress={() => this.setPage(2)}
+              color="green"
+            />
+          </View>
+        </View>
+
       </View>
     );
   }
@@ -136,5 +158,13 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: "center",
     justifyContent: "space-evenly",
+  },
+  menuBar: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  menuBarButton: {
+    flex: 1,
+    justifyContent: "center"
   }
 });

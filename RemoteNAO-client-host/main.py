@@ -1,4 +1,4 @@
-import os, time, logging
+import os, time, logging, subprocess
 
 from socketIO_client_nexus import SocketIO
 from naoqi import ALProxy
@@ -7,7 +7,7 @@ import nao_scripts
 
 #####
 
-IP = "192.168.43.116"
+IP = "192.168.43.161"
 PORT = 9559
 
 tts = ALProxy("ALTextToSpeech", IP , PORT)
@@ -45,12 +45,17 @@ def instruction_received(*args):
     nao_scripts.instruction(tts, rp, args)
 
 def get_top_image(*args):
-    print(args)
     nao_scripts.getTopImage(args[0])
 
+def start_teleop():
+    instr = "rosrun nao_remotenao teleop_rn.py"
+    process = subprocess.Popen(instr.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
 
 
 def main():
+
+    start_teleop()
     
     socketIO.on('connect', connect)
 
@@ -61,6 +66,8 @@ def main():
     socketIO.on('instruction_to_rpi', instruction_received)
 
     socketIO.on('asking_for_img', get_top_image)
+
+    socketIO.on('movement_instruction', change_movement)
 
     # Keeps the socket open indefinitely...
     socketIO.wait()
