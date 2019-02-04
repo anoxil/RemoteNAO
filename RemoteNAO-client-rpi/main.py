@@ -2,15 +2,11 @@
 # VIRTUAL_ENV=$HOME/.virtualenv
 # source $VIRTUAL_ENV/bin/activate
 
-# To RUN:
-# sudo python lights.py
-
 import os
 import time
 import logging
-from collections import Counter, OrderedDict
 
-from socketIO_client import SocketIO
+from socketIO_client_nexus import SocketIO
 
 logging.getLogger('socketIO-client').setLevel(logging.DEBUG)
 
@@ -33,77 +29,25 @@ def on_disconnect():
 def authenticated(*args):
     print('RPI is connected to the Server')
 
-def rgb_to_hex(red, green, blue):
-    return '%02x%02x%02x' % (red, green, blue)
-
-def send_colors_to_shirt(squares):
-    # filter only squares that are selected
-    selected_squares = list(filter(lambda square: square['isSelected'], squares))
-
-    # just return the color object
-    squares_rgb = list(map(lambda x: x['color'], selected_squares))
-
-    # convert rgb to hex colors
-    squares_hex = list(map(lambda x: rgb_to_hex(x['r'], x['g'], x['b']), squares_rgb))
-
-    # reduce, count colors, and sort in decreasing order
-    counted_colors = Counter(squares_hex)
-
-    # return sort in decreasing order as list (array)
-    sorted_colors = list(OrderedDict(counted_colors.most_common()).keys())
-
-    shirt_message = ""
-
-    if (len(sorted_colors) == 1):
-        shirt_message = "%s %s" % (sorted_colors[0], sorted_colors[0])
-    else:
-        shirt_message = "%s %s" % (sorted_colors[0], sorted_colors[1])
-
-    print(shirt_message)
-    socketIO.emit('alertShirt', shirt_message)
-
-def updateState(data):
-    squares = data['squares']
-
-    # iterate through array and find the lights, turn them on.
-    unicorn.set_layout(unicorn.AUTO)
-    unicorn.rotation(180)
-    unicorn.brightness(0.6)
-
-    for square in squares:
-        if square['isSelected']:
-            x = square['coords'][0]
-            y = square['coords'][1]
-            r = square['color']['r']
-            g = square['color']['g']
-            b = square['color']['b']
-
-            unicorn.set_pixel(x,y,r,g,b)
-
-    send_colors_to_shirt(squares)
-
-    unicorn.show()
-    time.sleep(7)
-
-    unicorn.off()
+def instruction_received(*args):
+    print('instruction received : ' + args[0])
 
 def main():
-    # Listen
+    
     socketIO.on('connect', connect)
 
-    # Gets msg from other client!
-    socketIO.on('updateState', updateState)
+    socketIO.on('reconnect', reconnect)
 
-    socketIO.on('reconnect', reconnect);
+    socketIO.on('disconnect', on_disconnect)
 
-    socketIO.on('disconnect', on_disconnect);
+    socketIO.on('instruction_to_rpi', instruction_received)
 
     # Keeps the socket open indefinitely...
-    socketIO.wait();
+    socketIO.wait()
 
 if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
-        print 'Killed by user'
+        print('Killed by user')
         sys.exit(0)
