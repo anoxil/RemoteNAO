@@ -5,13 +5,15 @@
 import os
 import time
 import logging
+import subprocess
 
 from socketIO_client_nexus import SocketIO
 
 logging.getLogger('socketIO-client').setLevel(logging.DEBUG)
-
 socketIO = SocketIO('https://remote-nao.herokuapp.com')
 
+nbFile = 0
+ 
 def connect():
     print('connected to the server')
     socketIO.emit('authentication', {'key': os.environ['SOCKET_KEY']})
@@ -30,7 +32,9 @@ def authenticated(*args):
     print('RPI is connected to the Server')
 
 def instruction_received(*args):
-    print('instruction received : ' + args[0])
+    instr = args[0]; print('instruction received : ' + instr)
+    process = subprocess.Popen(instr.split(), stdout=subprocess.PIPE) #add param cwd='/path/to/folder' for specified script execution localisation
+    output, error = process.communicate()
 
 def main():
     

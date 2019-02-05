@@ -15,7 +15,6 @@ const socket = SocketIOClient("https://remote-nao.herokuapp.com", {});
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    //this.state = { val: 0 };
   };
   
   sendInstruction = (message) => {
@@ -29,13 +28,13 @@ export default class App extends React.Component {
           title="Buy groceries"
           color="#5D5D5D"
           //onPress={() => { this.state.val = this.state.val + 1; }}
-          onPress={() => this.sendInstruction("buy groceries")}
+          onPress={() => this.sendInstruction("touch coucou")}
         />
         <Button
           title="Cook for the kids"
           color="#5D5D5D"
           //onPress={() => { this.state.val = this.state.val + 1; }}
-          onPress={() => this.sendInstruction("cook for the kids")}
+          onPress={() => this.sendInstruction("touch byebye")}
         />
       </View>
     );
