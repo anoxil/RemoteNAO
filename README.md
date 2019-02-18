@@ -1,2 +1,5 @@
 # RemoteNAO
-Control your NAO robot remotely with a mobile app [individual programming project, ENSC's second year]
+Control your NAO robot remotely from a smartphone and/or the web.
+
+Work in progress...
+[####------------------] 18%
