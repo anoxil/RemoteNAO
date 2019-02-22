@@ -1,19 +1,27 @@
-# for testing, make sure the virtual env is set:
-# VIRTUAL_ENV=$HOME/.virtualenv
-# source $VIRTUAL_ENV/bin/activate
-
-import os
-import time
-import logging
-import subprocess
+import os, time, logging, subprocess
 
 from socketIO_client_nexus import SocketIO
+from naoqi import ALProxy
+
+import nao_scripts
+
+
+#####
+
+tts = ALProxy("ALTextToSpeech", "192.168.43.116", 9559)
+rp = ALProxy("ALRobotPosture" ,"192.168.43.116", 9559)
+
+tts.setLanguage("French")
+tts.setParameter("pitchShift", 2.5)
+
+#####
 
 logging.getLogger('socketIO-client').setLevel(logging.DEBUG)
 socketIO = SocketIO('https://remote-nao.herokuapp.com')
 
-nbFile = 0
+#####
  
+
 def connect():
     print('connected to the server')
     socketIO.emit('authentication', {'key': os.environ['SOCKET_KEY']})
@@ -32,9 +40,20 @@ def authenticated(*args):
     print('RPI is connected to the Server')
 
 def instruction_received(*args):
-    instr = args[0]; print('instruction received : ' + instr)
+    """
+    instr = "python " + args[0] + ".py"
     process = subprocess.Popen(instr.split(), stdout=subprocess.PIPE) #add param cwd='/path/to/folder' for specified script execution localisation
     output, error = process.communicate()
+    
+    
+    try:
+        print("instruction received : " + args[0])
+    except TypeError:
+        print("instruction received : " + args[0]["0"])
+
+        """
+
+    nao_scripts.instruction(args)
 
 def main():
     

@@ -23,27 +23,56 @@ export default class App extends React.Component {
   
   render() {
     return (
-      <View style={styles.container}>
-        <Button
-          title="Buy groceries"
-          color="#5D5D5D"
-          //onPress={() => { this.state.val = this.state.val + 1; }}
-          onPress={() => this.sendInstruction("touch coucou")}
-        />
-        <Button
-          title="Cook for the kids"
-          color="#5D5D5D"
-          //onPress={() => { this.state.val = this.state.val + 1; }}
-          onPress={() => this.sendInstruction("touch byebye")}
-        />
+      <View style={{flex:1}}>
+        <View style={styles.video}>
+
+        </View>
+        <View style={{flex: 1}}>
+          <View style={styles.buttons}>
+            <Button
+              title="Say hello to the world!"
+              color="#5D5D5D"
+              onPress={() => this.sendInstruction("helloworld")}
+            />
+            <Button
+              title="Sit!"
+              color="#5D5D5D"
+              onPress={() => this.sendInstruction("sit")}
+            />
+          </View>
+          <View style={styles.buttons}>
+            <Button
+              title="Rest on the ground."
+              color="#5D5D5D"
+              onPress={() => this.sendInstruction("lyingground")}
+            />
+            <Button
+              title="Stand up!"
+              color="#5D5D5D"
+              onPress={() => this.sendInstruction("standup")}
+            />
+          </View>
+          <View style={styles.buttons}>
+            <Button
+              title="Say this text."
+              color="#5D5D5D"
+              onPress={() => this.sendInstruction({0: "saytext", 1: "bloubloublou"})}
+            />
+          </View>
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  video: {
     flex: 1,
+    backgroundColor: "blue"
+  },
+  buttons: {
+    flex: 1,
+    flexDirection: "row",
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "space-evenly"
