@@ -1,18 +1,19 @@
-def instruction(*args):
+def instruction(tts, rp, *args):
     """Automaticaly calls the instructions you wish to execute on your NAO"""
 
     #get values
     if (type(args[0][0]) is unicode): #si ce n'est qu'une instruction
         instr = args[0][0]
-    else: #si on y ajoute un complément
+    else: #si on y ajoute un parametre
         instr = args[0][0]["0"]
         param = args[0][0]["1"]
 
     #commands
     if instr == "helloworld":
-        tts.say("wesh mathilda!")
+        tts.say("prostrai prosternai")
 
     elif instr == "saytext":
+        param = param.encode('ascii', 'replace')
         tts.say(param)
 
     elif instr == "lyingground":
@@ -25,7 +26,7 @@ def instruction(*args):
         rp.goToPosture("Stand", 1.0)
 
     else:
-        print("no command found")
+        tts.say("Je n'ai pas compris votre demande.")
 
 
 

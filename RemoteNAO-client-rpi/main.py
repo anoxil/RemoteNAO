@@ -5,14 +5,16 @@ from naoqi import ALProxy
 
 import nao_scripts
 
-
 #####
 
-tts = ALProxy("ALTextToSpeech", "192.168.43.116", 9559)
-rp = ALProxy("ALRobotPosture" ,"192.168.43.116", 9559)
+IP = "192.168.43.116"
+PORT = 9559
+
+tts = ALProxy("ALTextToSpeech", IP , PORT)
+rp = ALProxy("ALRobotPosture", IP, PORT)
 
 tts.setLanguage("French")
-tts.setParameter("pitchShift", 2.5)
+tts.setParameter("pitchShift", 1)
 
 #####
 
@@ -53,7 +55,7 @@ def instruction_received(*args):
 
         """
 
-    nao_scripts.instruction(args)
+    nao_scripts.instruction(tts, rp, args)
 
 def main():
     

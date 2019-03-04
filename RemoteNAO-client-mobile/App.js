@@ -1,6 +1,6 @@
 import React from "react";
 import SocketIOClient from "socket.io-client";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, TextInput, View, Button } from "react-native";
 
 //To dismiss the Websocket connection warning, apparently useless (cf. https://stackoverflow.com/questions/53638667/unrecognized-websocket-connection-options-agent-permessagedeflate-pfx)
 console.ignoredYellowBox = ['Remote debugger'];
@@ -15,7 +15,10 @@ const socket = SocketIOClient("https://remote-nao.herokuapp.com", {});
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-  };
+    this.state = {
+      text: ''
+    };
+  }
   
   sendInstruction = (message) => {
     socket.emit("instruction_to_rpi", message);
@@ -53,10 +56,15 @@ export default class App extends React.Component {
             />
           </View>
           <View style={styles.buttons}>
+            <TextInput
+              value={this.state.text}
+              onChangeText={(text) => this.setState({text})}
+              placeholder="Write here what NAO must say..."
+            />
             <Button
               title="Say this text."
               color="#5D5D5D"
-              onPress={() => this.sendInstruction({0: "saytext", 1: "bloubloublou"})}
+              onPress={() => this.sendInstruction({0: "saytext", 1: this.state.text})}
             />
           </View>
         </View>
