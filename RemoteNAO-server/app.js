@@ -12,6 +12,12 @@ io.on('connection', function(socket){
   socket.on('instruction_to_rpi', function(message) {
     io.emit('instruction_to_rpi', message);
   });
+  socket.on('img_to_client', function(image) {
+    io.emit('img_to_client', image);
+  });
+  socket.on('asking_for_img', function(data) {
+    io.emit('asking_for_img', data);
+  });
 });
 
 http.listen(port, function(){});

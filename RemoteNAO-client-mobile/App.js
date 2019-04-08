@@ -1,6 +1,6 @@
 import React from "react";
 import SocketIOClient from "socket.io-client";
-import { StyleSheet, TextInput, View, Button } from "react-native";
+import { StyleSheet, Text, TextInput, View, Button, Image, StatusBar, TouchableOpacity } from "react-native";
 
 //To dismiss the Websocket connection warning, apparently useless (cf. https://stackoverflow.com/questions/53638667/unrecognized-websocket-connection-options-agent-permessagedeflate-pfx)
 console.ignoredYellowBox = ['Remote debugger'];
@@ -16,21 +16,49 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: ''
+      text: "",
+      topCameraRunning: false,
+      img64: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
     };
   }
   
+  listenerTopCamera() {
+    this.setState({topCameraRunning: !this.state.topCameraRunning});
+
+    if (!this.state.topCameraRunning) { //if camera is not watched
+      socket.on("img_to_client", function(image) {
+        this.setState({img64: image});
+      });
+      socket.emit("asking_for_img", "");
+    } 
+    else { //if camera is watched
+      socket.removeAllListeners("img_to_client");
+    }
+  };
+
   sendInstruction = (message) => {
-    socket.emit("instruction_to_rpi", message);
+    socket.emit("instruction_to_host", message);
   };
   
   render() {
     return (
       <View style={{flex:1}}>
-        <View style={styles.video}>
-
+        <StatusBar hidden={true}/>
+        <View style={styles.videoView}>
+          <Image
+            style={{width: '100%', height: '100%'}}
+            source={{uri: 'data:image/png;base64,' + this.state.img64}}
+          />
         </View>
-        <View style={{flex: 1}}>
+        <View style={styles.buttonsView}>
+          <View style={styles.buttons}>
+            <TouchableOpacity
+              style={this.state.topCameraRunning ? styles.imageButtonOn : styles.imageButtonOff}
+              onPress={() => {this.listenerTopCamera()}}
+            >
+              <Text>{this.state.topCameraRunning ? "STOP CAMERA" : "START CAMERA"}</Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.buttons}>
             <Button
               title="Say hello to the world!"
@@ -74,9 +102,11 @@ export default class App extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  video: {
-    flex: 1,
-    backgroundColor: "blue"
+  videoView: {
+    flex: 2
+  },
+  buttonsView: {
+    flex: 3
   },
   buttons: {
     flex: 1,
@@ -84,5 +114,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "space-evenly"
+  },
+  imageButtonOff: {
+    backgroundColor: "#20f6d2",
+    height: 50,
+    width: 190,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  imageButtonOn: {
+    backgroundColor: "#ff4c4c",
+    height: 50,
+    width: 190,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "space-evenly",
   }
 });
