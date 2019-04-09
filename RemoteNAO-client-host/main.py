@@ -1,7 +1,5 @@
-import os, time, logging, subprocess, base64, io 
-import numpy as np
+import os, time, logging
 
-from PIL import Image
 from socketIO_client_nexus import SocketIO
 from naoqi import ALProxy
 
@@ -20,7 +18,7 @@ tts.setParameter("pitchShift", 1)
 
 #####
 
-logging.getLogger('socketIO-client').setLevel(logging.DEBUG)
+#logging.getLogger('socketIO-client').setLevel(logging.DEBUG)
 socketIO = SocketIO('https://remote-nao.herokuapp.com')
 
 #####
@@ -46,8 +44,8 @@ def authenticated(*args):
 def instruction_received(*args):
     nao_scripts.instruction(tts, rp, args)
 
-def get_top_image():
-    socketIO.emit("img_to_client", nao_scripts.getTopImage())
+def get_top_image(*args):
+    nao_scripts.getTopImage(args[0])
 
 
 

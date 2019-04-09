@@ -2,6 +2,7 @@ import React from "react";
 import SocketIOClient from "socket.io-client";
 import { StyleSheet, Text, TextInput, View, Button, Image, StatusBar, TouchableOpacity } from "react-native";
 
+
 //To dismiss the Websocket connection warning, apparently useless (cf. https://stackoverflow.com/questions/53638667/unrecognized-websocket-connection-options-agent-permessagedeflate-pfx)
 console.ignoredYellowBox = ['Remote debugger'];
 import { YellowBox } from 'react-native';
@@ -18,27 +19,44 @@ export default class App extends React.Component {
     this.state = {
       text: "",
       topCameraRunning: false,
+      topCameraNodeName: "null",
       img64: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
     };
+
+    this.updateTopCamera = this.updateTopCamera.bind(this);
   }
+
+
   
-  listenerTopCamera() {
+  listenerTopCamera = () => {
     this.setState({topCameraRunning: !this.state.topCameraRunning});
 
-    if (!this.state.topCameraRunning) { //if camera is not watched
-      socket.on("img_to_client", function(image) {
-        this.setState({img64: image});
+    if (!this.state.topCameraRunning) { //if camera is started
+      socket.emit("asking_for_img", this.state.topCameraNodeName);
+      socket.on("img_to_client", (data) => {
+        this.setState({
+          img64: data[0],
+          topCameraNodeName: data[1]
+        });
       });
-      socket.emit("asking_for_img", "");
     } 
-    else { //if camera is watched
+    else { //if camera is stopped
+      socket.emit("asking_for_img", this.state.topCameraNodeName);
       socket.removeAllListeners("img_to_client");
+      this.setState({
+        img64: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+        topCameraNodeName: "null"
+      });
     }
-  };
+  }
+
+  updateTopCamera = (image) => {
+    this.setState({img64: image});
+  }
 
   sendInstruction = (message) => {
-    socket.emit("instruction_to_host", message);
-  };
+    socket.emit("instruction_to_rpi", message);
+  }
   
   render() {
     return (
@@ -54,7 +72,7 @@ export default class App extends React.Component {
           <View style={styles.buttons}>
             <TouchableOpacity
               style={this.state.topCameraRunning ? styles.imageButtonOn : styles.imageButtonOff}
-              onPress={() => {this.listenerTopCamera()}}
+              onPress={() => this.listenerTopCamera()}
             >
               <Text>{this.state.topCameraRunning ? "STOP CAMERA" : "START CAMERA"}</Text>
             </TouchableOpacity>

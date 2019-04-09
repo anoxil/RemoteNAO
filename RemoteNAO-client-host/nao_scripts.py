@@ -1,3 +1,4 @@
+# NAOQI
 def instruction(tts, rp, *args):
     """Automaticaly calls the instructions you wish to execute on your NAO"""
 
@@ -30,22 +31,22 @@ def instruction(tts, rp, *args):
 
 
 
-def getTopImage():
+
+# ROS NODES (if I ever need multiple nodes at once, use launch)
+def getTopImage(nodeName):
     """Script to get the current image of the top camera"""
-    # upgradable to a node listening to topic (cf. http://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28python%29)
 
-    #check topic path && add -p for csv style
-    instr = "rostopic echo -n 1 /nao_robot/camera/top/camera/image_raw"
-    process = subprocess.Popen(instr.split(), stdout=subprocess.PIPE, cwd='~/')
+    print("=======================")
+    if nodeName == "null":
+        print("node is null")
+    else:
+        print("node stopped")
+    print("=======================")
+
+
+    import subprocess
+
+    instr = "rosrun nao_remotenao top_camera.py"
+    process = subprocess.Popen(instr.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
-
-    #split if -p, but understand how no -p works
-    #store the data in img_bgr
-
-    img_np_reshaped = np.reshape(np.asarray(img_bgr), (240,320,3))
-    im = Image.fromarray(img_np_reshaped.astype("uint8"))
-    rawBytes = io.BytesIO()
-    im.save(rawBytes, "PNG")
-    rawBytes.seek(0)
-    
-    return base64.b64encode(rawBytes.read())
+    print(output)
