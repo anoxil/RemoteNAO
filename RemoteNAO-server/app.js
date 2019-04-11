@@ -9,8 +9,8 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  socket.on('instruction_to_rpi', function(message) {
-    io.emit('instruction_to_rpi', message);
+  socket.on('instruction_to_host', function(message) {
+    io.emit('instruction_to_host', message);
   });
   socket.on('img_to_client', function(image) {
     io.emit('img_to_client', image);

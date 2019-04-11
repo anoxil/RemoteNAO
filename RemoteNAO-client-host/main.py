@@ -45,6 +45,7 @@ def instruction_received(*args):
     nao_scripts.instruction(tts, rp, args)
 
 def get_top_image(*args):
+    print(args)
     nao_scripts.getTopImage(args[0])
 
 

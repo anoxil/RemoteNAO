@@ -35,18 +35,27 @@ def instruction(tts, rp, *args):
 # ROS NODES (if I ever need multiple nodes at once, use launch)
 def getTopImage(nodeName):
     """Script to get the current image of the top camera"""
-
-    print("=======================")
-    if nodeName == "null":
-        print("node is null")
-    else:
-        print("node stopped")
-    print("=======================")
-
-
     import subprocess
+
+    if nodeName != "null":
+        print("Killing top camera node...")
+        instr = "rosnode kill " + nodeName
+        process = subprocess.Popen(instr.split(), stdout=subprocess.PIPE)
+        output, error = process.communicate()
+        return
 
     instr = "rosrun nao_remotenao top_camera.py"
     process = subprocess.Popen(instr.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
-    print(output)
+
+
+"""
+do posture : #pour en créer de nouvelles, go dans choregraphe, positionner le NAO comme on le souhaite, enregistrer la position dans le panel de pose, exporter le fichier, et enfin placer ce dernier dans "roscd naoqi_pose/config/" à côté ou à la place de basic.xap
+    StandInit : rosrun naoqi_pose execute_pose.py "StandInit"
+    Stand     : rosrun naoqi_pose execute_pose.py "Stand"
+
+walking : #valeur entre 0 et 1 correspondent à la portée du pas
+    marche en avant : rostopic pub -1 /cmd_vel geometry_msgs/Twist '{linear: {x: 1.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}'      # négatif = arrière
+    marche en crabe : rostopic pub -1 /cmd_vel geometry_msgs/Twist '{linear: {x: 0.0, y: 1.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}'      # négatif = vers droite
+    marche tournant : rostopic pub -1 /cmd_vel geometry_msgs/Twist '{linear: {x: 1.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.0}}'      # négatif = vers droite
+"""
