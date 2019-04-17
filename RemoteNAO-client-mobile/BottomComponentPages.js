@@ -13,8 +13,12 @@ export default class BottomComponentPages extends React.Component {
         socket = this.props.socketProp;
     }
 
-    sendInstruction = (message) => {
-        socket.emit("instruction_to_rpi", message);
+    textToSpeech = (message) => {
+        socket.emit("text_to_speech", message);
+    }
+
+    executePose = (pose) => {
+        socket.emit("execute_pose", pose);
     }
 
     /*
@@ -62,23 +66,27 @@ export default class BottomComponentPages extends React.Component {
             return (
                 <View style={{flex: 1}}>
                     <View style={styles.posesButtons}>
-
                         <Button
-                        title="Sit!"
+                        title="Initial Position"
                         color="#5D5D5D"
-                        onPress={() => this.sendInstruction("sit")}
+                        onPress={() => this.executePose("StandInit")}
+                        />
+                        <Button
+                        title="Dab"
+                        color="#5D5D5D"
+                        onPress={() => this.executePose("Dab")}
                         />
                     </View>
                     <View style={styles.posesButtons}>
                         <Button
-                        title="Rest on the ground."
+                        title="Thriller"
                         color="#5D5D5D"
-                        onPress={() => this.sendInstruction("lyingground")}
+                        onPress={() => this.executePose("Thriller")}
                         />
                         <Button
-                        title="Stand up!"
+                        title="Fight"
                         color="#5D5D5D"
-                        onPress={() => this.sendInstruction("standup")}
+                        onPress={() => this.executePose("Fight")}
                         />
                     </View>
                 </View>
@@ -156,16 +164,14 @@ export default class BottomComponentPages extends React.Component {
                         <Button
                         title="Say this text."
                         color="#5D5D5D"
-                        onPress={() => this.sendInstruction({0: "saytext", 1: this.state.text})}
+                        onPress={() => this.textToSpeech(this.state.text)}
                         />
                     </View>
                     <View style={styles.posesButtons}>
                         <Button
                         title="Say hello to the world!"
                         color="#5D5D5D"
-                        onPress={() => {
-                            this.sendInstruction("helloworld");
-                        }}
+                        onPress={() => this.textToSpeech("helloworld")}
                         />
                     </View>
                 </View>

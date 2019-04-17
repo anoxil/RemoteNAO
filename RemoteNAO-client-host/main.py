@@ -1,6 +1,9 @@
 import os, time, logging, subprocess
 
 from socketIO_client_nexus import SocketIO
+import urllib3
+urllib3.disable_warnings()
+
 from naoqi import ALProxy
 
 import nao_scripts
@@ -55,7 +58,7 @@ def start_teleop():
 
 def main():
 
-    start_teleop()
+    #start_teleop()
     
     socketIO.on('connect', connect)
 
@@ -63,11 +66,9 @@ def main():
 
     socketIO.on('disconnect', on_disconnect)
 
-    socketIO.on('instruction_to_rpi', instruction_received)
+    socketIO.on('instruction_to_host', instruction_received)
 
     socketIO.on('asking_for_img', get_top_image)
-
-    socketIO.on('movement_instruction', change_movement)
 
     # Keeps the socket open indefinitely...
     socketIO.wait()

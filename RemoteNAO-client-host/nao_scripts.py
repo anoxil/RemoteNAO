@@ -38,12 +38,15 @@ def getTopImage(nodeName):
     
     import subprocess
 
+
     if nodeName != "null":
         print("Killing top camera node...")
         instr = "rosnode kill " + nodeName
         process = subprocess.Popen(instr.split(), stdout=subprocess.PIPE)
         output, error = process.communicate()
         return
+
+    print("coucou")
 
     instr = "rosrun nao_remotenao top_camera.py"
     process = subprocess.Popen(instr.split(), stdout=subprocess.PIPE)

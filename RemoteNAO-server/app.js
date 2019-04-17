@@ -20,7 +20,13 @@ io.on('connection', function(socket){
   });
   socket.on('movement_instruction', function(instruction) {
     io.emit('movement_instruction', instruction);
-  })
+  });
+  socket.on('execute_pose', function(pose) {
+    io.emit('execute_pose', pose);
+  });
+  socket.on('text_to_speech', function(message) {
+    io.emit('text_to_speech', message);
+  });
 });
 
 http.listen(port, function(){});
