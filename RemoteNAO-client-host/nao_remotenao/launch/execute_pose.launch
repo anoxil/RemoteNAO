@@ -1,0 +1,5 @@
+<launch>
+
+  <node pkg="nao_remotenao" type="execute_pose.py" name="execute_pose" />
+
+</launch>

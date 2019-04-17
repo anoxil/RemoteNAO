@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TextInput, View, Button, Text} from "react-native";
+import { StyleSheet, TextInput, View, Button} from "react-native";
 
 export default class BottomComponentPages extends React.Component {
     constructor(props) {

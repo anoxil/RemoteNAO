@@ -1,0 +1,5 @@
+<launch>
+
+  <node pkg="nao_remotenao" type="speech.py" name="speech" />
+
+</launch>

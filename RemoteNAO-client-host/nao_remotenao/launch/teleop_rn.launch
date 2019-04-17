@@ -1,0 +1,5 @@
+<launch>
+
+  <node pkg="nao_remotenao" type="teleop_rn.py" name="teleop_rn" />
+
+</launch>

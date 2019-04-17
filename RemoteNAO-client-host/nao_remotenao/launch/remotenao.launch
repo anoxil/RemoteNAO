@@ -1,0 +1,19 @@
+<launch>
+
+  <include file="$(find nao_remotenao)/launch/top_camera.launch" >
+  </include>
+  <include file="$(find nao_remotenao)/launch/speech.launch" >
+  </include>
+  <include file="$(find nao_remotenao)/launch/teleop_rn.launch" >
+  </include>
+  <include file="$(find nao_remotenao)/launch/execute_pose.launch" >
+  </include>
+
+  <!-- group ns="nao_remotenao">
+    <node pkg="nao_remotenao" type="top_camera.py" name="top_camera" />
+    <node pkg="nao_remotenao" type="teleop_rn.py" name="teleop_rn" />
+    <node pkg="nao_remotenao" type="speech.py" name="speech" />
+    <node pkg="nao_remotenao" type="execute_pose.py" name="execute_pose" />
+  </group -->
+
+</launch>

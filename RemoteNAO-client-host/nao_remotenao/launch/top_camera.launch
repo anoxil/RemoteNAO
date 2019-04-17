@@ -1,0 +1,5 @@
+<launch>
+
+  <node pkg="nao_remotenao" type="top_camera.py" name="top_camera" />
+
+</launch>
