@@ -3,8 +3,6 @@
 import rospy, subprocess
 
 from socketIO_client_nexus import SocketIO
-import urllib3
-urllib3.disable_warnings()
 
 from geometry_msgs.msg import Twist, Vector3
 

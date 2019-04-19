@@ -6,8 +6,6 @@ import actionlib
 
 from naoqi_bridge_msgs.msg import BodyPoseActionGoal, BodyPoseGoal
 from socketIO_client_nexus import SocketIO
-import urllib3
-urllib3.disable_warnings()
 
 socketIO = SocketIO('https://remote-nao.herokuapp.com')
 

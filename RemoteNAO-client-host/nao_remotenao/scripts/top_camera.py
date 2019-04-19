@@ -5,8 +5,6 @@ import numpy as np
 
 from PIL import Image as PIL_Image
 from socketIO_client_nexus import SocketIO
-import urllib3
-urllib3.disable_warnings()
 
 from sensor_msgs.msg import Image
 from rospy.numpy_msg import numpy_msg
