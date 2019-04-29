@@ -50,6 +50,8 @@ pip install socketIO-client-nexus==0.7.6
 ```
 Copy this folder's *nao_remotenao* package into your catkin workspace *src/* folder.
 
+Last but not least, change every occurence of "remote-nao.herokuapp.com" with your own Heroku server and every "192.168.43.161" with your own NAO's IP.
+
 #### Start up
 Terminal #1 :
 ```

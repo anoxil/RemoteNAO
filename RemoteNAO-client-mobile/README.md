@@ -14,6 +14,7 @@ You also have to npm install the SocketIO-client library :
 
 I have used Expo to develop this project and I recommend it to you as well. You can find more info in the [documentation](https://docs.expo.io/versions/latest/).
 
+Also remember to change the "remote-nao.herokuapp.com" occurence with your own Heroku server.
 
 ## How to use it ?
 
