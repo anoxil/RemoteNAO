@@ -9,4 +9,4 @@ This project is divided in three parts:
 **You can find detailed info for each of these parts in their respective folder's README.**
 
 ### Showcase video
-[![RemoteNAO showcase video](https://i.ibb.co/m9LSpLt/preview-showcase.png)](https://drive.google.com/file/d/1n4fN3JU5luQ-fgDB-CokCI6wU9sjFHm4/view?usp=sharing)
+[![RemoteNAO showcase video](https://i.ibb.co/m9LSpLt/preview-showcase.png)](https://www.youtube.com/watch?v=3BNU2Buid5o)
